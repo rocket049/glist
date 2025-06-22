@@ -4,8 +4,6 @@
 
 ```
 type GElement
-    func (p *GElement[T]) End() bool
-    func (p *GElement[T]) Insert(item T)
     func (p *GElement[T]) NextElement() *GElement[T]
     func (p *GElement[T]) PreElement() *GElement[T]
     func (p *GElement[T]) Value() T
@@ -18,6 +16,8 @@ type GList
     func (p *GList[T]) Clear()
     func (p *GList[T]) Empty() bool
     func (p *GList[T]) Front() *GElement[T]
+    func (p *GList[T]) Insert(item T, pos *GElement[T])
+    func (p *GList[T]) Range() iter.Seq[T]
     func (p *GList[T]) Remove(e *GElement[T])
     func (p *GList[T]) SearchAll(item T) []*GElement[T]
     func (p *GList[T]) SearchOne(item T) *GElement[T]

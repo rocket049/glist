@@ -22,7 +22,7 @@ func TestGList(t *testing.T) {
 	p := list1.Front()
 	res1 := []string{}
 	for {
-		if p.End() {
+		if p == nil {
 			break
 		}
 		res1 = append(res1, p.Value())
@@ -37,7 +37,7 @@ func TestGList(t *testing.T) {
 	list1.Clear()
 	p = list1.Front()
 	for {
-		if p.End() {
+		if p == nil {
 			break
 		}
 		println(p.Value())
@@ -65,24 +65,25 @@ func TestGList(t *testing.T) {
 
 	p = list1.Front()
 	for {
-		if p.End() {
-			break
-		}
+		e := p.Next
 		if p.Value() == "dog2" {
 			list1.Remove(p)
-		}
-		if p.Value() == "hello1" {
+		} else if p.Value() == "hello1" {
+			list1.Remove(p)
+		} else if p.Value() == "pig2" {
 			list1.Remove(p)
 		}
-		if p.Value() == "pig2" {
-			list1.Remove(p)
+
+		if e == nil {
+			break
 		}
-		p = p.Next
+
+		p = e
 	}
 	res2 := []string{}
 	p = list1.Front()
 	for {
-		if p.End() {
+		if p == nil {
 			break
 		}
 
@@ -92,7 +93,7 @@ func TestGList(t *testing.T) {
 	sort.Strings(res2)
 	result2 := strings.Join(res2, ",")
 	if result2 != "cow,mouse" {
-		t.Fatal("faile GList.Remove(e)")
+		t.Fatal("faile GList.Remove(e): cow,mouse != result:", result2)
 	}
 
 	list1.Add("cow")
@@ -113,8 +114,8 @@ func TestGElement(t *testing.T) {
 
 	list1.Add("first")
 	e = list1.Front()
-	e.Insert("two")
-	e.Insert("three")
+	list1.Insert("two", e)
+	list1.Insert("three", e)
 
 	e = e.NextElement()
 	if e.Value() != "three" {
@@ -138,5 +139,20 @@ func TestGElement(t *testing.T) {
 	e = list1.Front()
 	if e != nil {
 		t.Fatal("error GList.Front() of empty list")
+	}
+}
+
+func TestRange(t *testing.T) {
+	list1 := NewGList[string]()
+	list1.Add("a")
+	list1.Add("b")
+	list1.Add("c")
+	res := []string{}
+	for val := range list1.Range() {
+		res = append(res, val)
+	}
+	sort.Strings(res)
+	if strings.Join(res, "") != "abc" {
+		t.Fatal("fail TestRange.")
 	}
 }
