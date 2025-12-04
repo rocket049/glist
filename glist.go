@@ -1,3 +1,4 @@
+// golang generics list type
 package glist
 
 import (
